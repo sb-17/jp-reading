@@ -1,0 +1,503 @@
+/* Display face for Japanese, self-hosted so the app still looks right offline.
+   Same subset file Kanjii ships (see public/fonts/OFL.txt for the licence).
+   `swap`, never `block`: the fallback mincho shows immediately rather than
+   leaving the story invisible on a cold load. */
+@font-face {
+  font-family: "Sawarabi Mincho";
+  src: url("/fonts/sawarabi-mincho-subset.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* Japanese needs naming, not just fallback: with a Latin-only stack an
+     en-locale browser can pick a Simplified Chinese face and draw 直 骨 每 in
+     the wrong glyph forms. lang="ja" on the Japanese elements is the other
+     half of this. */
+  --font-jp-sans: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI",
+    "Yu Gothic", Meiryo, "Noto Sans JP", "Noto Sans CJK JP", sans-serif;
+  --font-jp-serif: "Sawarabi Mincho", "Hiragino Mincho ProN", "Yu Mincho",
+    YuMincho, "Noto Serif JP", "Noto Serif CJK JP", serif;
+
+  font-family: system-ui, Avenir, Helvetica, Arial, var(--font-jp-sans);
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: dark;
+
+  /* ---- Colour (dark, default) — Kanjii's tokens ---- */
+  /* Mirrored in the pre-paint script in app/layout.tsx, which sets
+     <meta theme-color> before this sheet exists. Change both together. */
+  --bg: #242424;
+  --surface-sunken: #1c1c1c;
+  --text: rgba(255, 255, 255, 0.92);
+  --text-strong: #ffffff;
+  --text-muted: #b3b3b3;
+  --text-faint: #8a8a8a;
+  --on-accent: #ffffff;
+  --surface: #555555;
+  --surface-strong: #484848;
+  --surface-strong-hover: #3c3c3c;
+  --border: rgba(255, 255, 255, 0.08);
+  --accent: #4da6ff;
+  --accent-hover: #80bfff;
+
+  /* ---- Typography scale ---- */
+  --text-xs: 0.8rem;
+  --text-sm: 0.9rem;
+  --text-base: 1rem;
+  --text-md: 1.15rem;
+  --text-lg: 1.4rem;
+  --text-xl: 1.8rem;
+
+  /* ---- Spacing scale (4px rhythm) ---- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-8: 3rem;
+
+  /* ---- Radii ---- */
+  --radius-sm: 6px;
+  --radius: 8px;
+  --radius-lg: 14px;
+
+  color: var(--text);
+  background-color: var(--bg);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --bg: #f6f7f9;
+  --surface-sunken: #eceef1;
+  --text: #1f2329;
+  --text-strong: #0e1116;
+  --text-muted: #5b626c;
+  --text-faint: #888f99;
+  --on-accent: #ffffff;
+  --surface: #e7e9ec;
+  --surface-strong: #dfe2e6;
+  --surface-strong-hover: #d2d6db;
+  --border: rgba(0, 0, 0, 0.12);
+  --accent: #1f7ae0;
+  --accent-hover: #1763c4;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  /* The document scrolls (unlike Kanjii's fixed shell) so mobile browsers can
+     collapse the URL bar as you read — the extra ~60px matters on a phone. */
+  overscroll-behavior-y: none;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: var(--bg);
+  color: var(--text);
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+a:hover {
+  color: var(--accent-hover);
+}
+
+.jp {
+  font-family: var(--font-jp-serif);
+}
+
+.page {
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+  padding: var(--space-4);
+  padding-bottom: max(var(--space-8), env(safe-area-inset-bottom));
+}
+
+/* ---------------- top bar ---------------- */
+
+.bar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  padding-top: max(var(--space-2), env(safe-area-inset-top));
+  background: var(--surface-strong);
+  border-bottom: 1px solid var(--border);
+}
+
+.bar-title {
+  margin-right: auto;
+  min-width: 0;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--text-strong);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.bar-title small {
+  display: block;
+  font-weight: 400;
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+}
+
+.chip {
+  flex-shrink: 0;
+  font: inherit;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  padding: var(--space-2) var(--space-3);
+  border-radius: 99px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-muted);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.chip:hover {
+  background: var(--surface-strong-hover);
+  color: var(--text-strong);
+}
+.chip.on {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+
+.progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0;
+  background: var(--accent);
+  z-index: 30;
+}
+
+/* ---------------- library ---------------- */
+
+.page-title {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin: var(--space-6) 0 var(--space-2);
+  color: var(--text-strong);
+}
+
+.page-lede {
+  margin: 0 0 var(--space-6);
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+.story-list {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.story-card {
+  display: block;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-4) var(--space-5);
+  color: var(--text);
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.story-card:hover {
+  background: var(--surface-strong-hover);
+  border-color: var(--accent);
+  color: var(--text);
+}
+.story-card h2 {
+  margin: 0;
+  font-size: var(--text-lg);
+  line-height: 1.4;
+  color: var(--text-strong);
+}
+.story-card .en {
+  margin: var(--space-1) 0 0;
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+.story-card .meta {
+  margin: var(--space-3) 0 0;
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* ---------------- reader ---------------- */
+
+.hero {
+  padding: var(--space-8) 0 var(--space-5);
+  border-bottom: 1px solid var(--border);
+}
+.hero h1 {
+  margin: 0 0 var(--space-2);
+  font-size: clamp(28px, 7vw, 42px);
+  line-height: 1.35;
+  letter-spacing: 0.05em;
+  color: var(--text-strong);
+}
+.hero .sub {
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  color: var(--text-faint);
+}
+
+.howto {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4) var(--space-5);
+  margin: var(--space-6) 0;
+  font-size: var(--text-sm);
+  line-height: 1.75;
+  color: var(--text-muted);
+}
+.howto b {
+  color: var(--text-strong);
+}
+.howto ul {
+  margin: var(--space-2) 0 0;
+  padding-left: var(--space-4);
+}
+
+.ch-num {
+  margin: var(--space-8) 0 var(--space-3);
+  /* same size as a story line — it carries furigana, and at label size the
+     readings were unreadable */
+  font-size: clamp(18px, 2.4vw, 21px);
+  line-height: 2;
+  /* wide tracking pushes each kanji away from the reading centred above it, so
+     keep it to a hint of a label rather than 0.2em */
+  letter-spacing: 0.05em;
+  color: var(--accent);
+}
+.ch-title {
+  margin: 0 0 var(--space-6);
+  font-size: clamp(20px, 5vw, 26px);
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  color: var(--text-strong);
+}
+
+.line {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  font-family: var(--font-jp-serif);
+  font-size: clamp(18px, 2.4vw, 21px);
+  line-height: 2.55;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  background: none;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 2px var(--space-1);
+  margin: 0 0 var(--space-1);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.line:hover {
+  background: var(--surface-strong-hover);
+}
+/* dialogue lines: hang the opening 「 into the margin */
+.line.dialogue {
+  padding-left: 1.1em;
+  text-indent: -0.55em;
+}
+
+.line-en {
+  margin: 2px 0 var(--space-4);
+  padding: 0 var(--space-1) 0 var(--space-3);
+  border-left: 2px solid var(--border);
+  font-size: var(--text-sm);
+  line-height: 1.7;
+  font-style: italic;
+  color: var(--text-muted);
+}
+
+ruby {
+  /* Browsers default to `space-around`, which spreads a short reading across
+     the full width of its base — 見 gets its み drifting off to one side.
+     `center` sits the reading exactly over the kanji. */
+  -webkit-ruby-align: center;
+  ruby-align: center;
+}
+
+rt {
+  font-size: 0.58em;
+  font-weight: 400;
+  font-style: normal;
+  /* inherited tracking would offset the reading from the kanji below it */
+  letter-spacing: 0;
+  color: var(--text-faint);
+}
+/* ふりがな modes. `visibility` rather than `display` so the line height —
+   and so the whole page — doesn't jump when you cycle through them. */
+[data-furi="off"] rt {
+  visibility: hidden;
+}
+[data-furi="less"] ruby:not(.always) rt {
+  visibility: hidden;
+}
+/* the new-kanji box always shows its readings */
+.newk rt {
+  visibility: visible;
+}
+
+.newk {
+  display: flex;
+  gap: var(--space-4);
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3) var(--space-4);
+  margin: 0 0 var(--space-6);
+}
+.newk .big {
+  font-family: var(--font-jp-serif);
+  font-size: 46px;
+  line-height: 1.1;
+  color: var(--accent);
+}
+.newk .txt {
+  font-size: var(--text-xs);
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+.newk b {
+  font-family: var(--font-jp-serif);
+  font-size: var(--text-base);
+  color: var(--text-strong);
+}
+.newk .ex {
+  display: block;
+  margin-top: 2px;
+  font-family: var(--font-jp-serif);
+  font-size: var(--text-sm);
+}
+
+.box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  margin: var(--space-5) 0;
+}
+.box-label,
+.newk .lbl {
+  display: block;
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+.newk .lbl {
+  margin-bottom: 2px;
+}
+
+table.vocab {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+}
+table.vocab td {
+  padding: var(--space-1) var(--space-2);
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+table.vocab tr:last-child td {
+  border-bottom: none;
+}
+table.vocab td.w {
+  width: 1%;
+  white-space: nowrap;
+  font-family: var(--font-jp-serif);
+  font-size: var(--text-base);
+  color: var(--text-strong);
+}
+table.vocab td.r {
+  width: 1%;
+  white-space: nowrap;
+  font-family: var(--font-jp-serif);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.grammar {
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-sm);
+  line-height: 1.65;
+}
+.grammar:last-child {
+  margin-bottom: 0;
+}
+.grammar b {
+  font-family: var(--font-jp-serif);
+  font-size: var(--text-base);
+  color: var(--accent);
+}
+.grammar .ex {
+  display: block;
+  margin-top: 3px;
+  font-family: var(--font-jp-serif);
+  color: var(--text-muted);
+}
+
+.chapter + .chapter {
+  border-top: 1px solid var(--border);
+  padding-top: var(--space-6);
+  margin-top: var(--space-8);
+}
+
+.end {
+  margin: var(--space-8) 0 0;
+  text-align: center;
+  font-family: var(--font-jp-serif);
+  font-size: var(--text-sm);
+  letter-spacing: 0.4em;
+  color: var(--text-faint);
+}
+
+@media print {
+  .bar,
+  .progress {
+    display: none;
+  }
+  .line-en {
+    display: block !important;
+  }
+}

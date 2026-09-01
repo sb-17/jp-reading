@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/simon/Desktop/kanjii/**)",
+      "Read(//c/Users/simon/Desktop/**)",
+      "Bash(cd \"/c/Users/simon/Desktop/kanjii\" && cat package.json && echo \"---PUBLIC---\" && ls -R public | head -50 && echo \"---SRC---\" && find src -type f | head -80)",
+      "Bash(cd \"/c/Users/simon/Desktop/kanjii\" && wc -l src/index.css src/App.css && head -160 src/index.css)",
+      "Bash(cd \"/c/Users/simon/Desktop/JP reading\" && sed -n '/<\\\\/style>/,/^<\\\\/head>/p' \"11時11分の終電.html\" | head -5; echo \"=== BODY SAMPLE ===\"; grep -n \"howto\" -A 200 \"11時11分の終電.html\" | sed -n '20,140p')",
+      "Bash(cd \"/c/Users/simon/Desktop/kanjii\" && echo \"=== shared.css ===\" && cat src/styles/shared.css 2>/dev/null | head -120; echo \"=== App.css ===\" && cat src/App.css; echo \"=== Navigation.css ===\" && cat src/components/navigation/Navigation.css)",
+      "Bash(cd \"/c/Users/simon/Desktop/kanjii\" && echo \"=== index.html ===\" && cat index.html; echo \"=== PWA config ===\" && grep -n \"manifest\\\\|VitePWA\\\\|name:\\\\|theme_color\\\\|icons\\\\|display\" -A2 vite.config.ts | head -80)",
+      "Bash(npm -v)",
+      "Bash(node \"C:/Users/simon/AppData/Local/Temp/claude/c--Users-simon-Desktop-JP-reading/5051fff9-283b-475e-b02f-ba8891cc7e5d/scratchpad/extract.mjs\")",
+      "Bash(npm install *)",
+      "Bash(npm ls *)",
+      "Bash(npm audit *)",
+      "Bash(mkdir -p public/fonts)",
+      "Bash(cp \"/c/Users/simon/Desktop/kanjii/public/fonts/sawarabi-mincho-subset.woff2\" \"/c/Users/simon/Desktop/kanjii/public/fonts/OFL.txt\" public/fonts/)",
+      "Bash(mkdir -p public)",
+      "Bash(node \"C:/Users/simon/AppData/Local/Temp/claude/c--Users-simon-Desktop-JP-reading/5051fff9-283b-475e-b02f-ba8891cc7e5d/scratchpad/icons.mjs\")",
+      "Bash(npm run *)",
+      "Bash(grep -o '四月.\\\\{0,220\\\\}' out/stories/11-11-no-shuden/index.html)",
+      "Bash(gh --version)",
+      "Bash(gh auth *)",
+      "Bash(git config *)"
+    ]
+  }
+}
