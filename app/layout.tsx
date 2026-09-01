@@ -7,10 +7,15 @@ export const metadata: Metadata = {
   description: "Graded Japanese stories with furigana and line-by-line English.",
   manifest: "/manifest.webmanifest",
   appleWebApp: { capable: true, title: "読む", statusBarStyle: "black" },
+  /* Same treatment as Kanjii's icon — #4da6ff plate, white bold gothic glyph —
+     with 読 so the two are distinguishable in a tab strip. Keep the SVG first:
+     browsers that support it prefer it and it stays sharp at any size. The .ico
+     carries 16/32/48 because Google fetches /favicon.ico by convention. */
   icons: {
     icon: [
-      { url: "/icon.svg", type: "image/svg+xml" },
-      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+      { url: "/favicon.ico", sizes: "48x48" },
     ],
     apple: "/apple-touch-icon.png",
   },

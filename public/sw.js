@@ -2,7 +2,7 @@
    policy is the twenty lines below, and it needs no build step.
 
    Bump CACHE to force every client to drop the old files. */
-const CACHE = "jp-reading-v1";
+const CACHE = "jp-reading-v2";
 
 self.addEventListener("install", () => self.skipWaiting());
 
