@@ -290,8 +290,16 @@ a:hover {
   padding-left: var(--space-4);
 }
 
-.ch-num {
+.ch-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
   margin: var(--space-8) 0 var(--space-3);
+}
+
+.ch-num {
+  margin: 0;
   /* same size as a story line — it carries furigana, and at label size the
      readings were unreadable */
   font-size: clamp(18px, 2.4vw, 21px);

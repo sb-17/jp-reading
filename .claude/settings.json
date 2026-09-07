@@ -26,7 +26,9 @@
       "Read(//c/Users/simon/Desktop/kanjii/public/**)",
       "PowerShell(& \"C:\\\\Users\\\\simon\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-simon-Desktop-JP-reading\\\\5051fff9-283b-475e-b02f-ba8891cc7e5d\\\\scratchpad\\\\icons.ps1\")",
       "Bash(node \"C:/Users/simon/AppData/Local/Temp/claude/c--Users-simon-Desktop-JP-reading/5051fff9-283b-475e-b02f-ba8891cc7e5d/scratchpad/ico.mjs\")",
-      "Bash(rm -f public/icon.svg)"
+      "Bash(rm -f public/icon.svg)",
+      "Bash(grep -o 'ch-head.\\\\{0,200\\\\}' out/stories/11-11-no-shuden/index.html)",
+      "Bash(node -e ' *)"
     ]
   }
 }

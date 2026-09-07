@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { Story } from "@/lib/stories";
-import { ruby } from "@/lib/ruby";
+import { plain, ruby } from "@/lib/ruby";
 import { ThemeToggle } from "@/app/ThemeToggle";
 
 const FURI = [
@@ -17,6 +17,7 @@ export function Reader({ story }: { story: Story }) {
   const [showAll, setShowAll] = useState(false);
   const [revealed, setRevealed] = useState<Set<string>>(new Set());
   const [progress, setProgress] = useState(0);
+  const [copied, setCopied] = useState<number | null>(null);
 
   /* Read after mount, not in the initial state: the page is prerendered at
      build time, so touching localStorage during render would mismatch. */
@@ -57,6 +58,16 @@ export function Reader({ story }: { story: Story }) {
       if (!next.delete(key)) next.add(key);
       return next;
     });
+
+  /* Plain Japanese, no furigana and no English — the form Kanjii's reader wants
+     for pulling vocabulary out of. */
+  const copyChapter = async (ci: number) => {
+    const c = story.chapters[ci];
+    const text = [c.t, ...c.ja.map(([ja]) => ja)].map(plain).join("\n");
+    await navigator.clipboard.writeText(text);
+    setCopied(ci);
+    setTimeout(() => setCopied(null), 1500);
+  };
 
   return (
     <div data-furi={FURI[furi][0]}>
@@ -108,9 +119,17 @@ export function Reader({ story }: { story: Story }) {
 
         {story.chapters.map((c, ci) => (
           <section className="chapter" key={ci}>
-            <h2 className="ch-num jp" lang="ja">
-              {ruby(c.n)}
-            </h2>
+            <div className="ch-head">
+              <h2 className="ch-num jp" lang="ja">
+                {ruby(c.n)}
+              </h2>
+              <button
+                className={`chip${copied === ci ? " on" : ""}`}
+                onClick={() => copyChapter(ci)}
+              >
+                {copied === ci ? "Copied ✓" : "Copy text"}
+              </button>
+            </div>
             <h3 className="ch-title jp" lang="ja">
               {ruby(c.t)}
             </h3>
