@@ -8,11 +8,13 @@ export default function Library() {
   return (
     <>
       <div className="bar">
-        <div className="bar-title">
-          日本語を読む
-          <small>JP Reading</small>
+        <div className="bar-row">
+          <div className="bar-title">
+            日本語を読む
+            <small>JP Reading</small>
+          </div>
+          <ThemeToggle />
         </div>
-        <ThemeToggle />
       </div>
 
       <main className="page">

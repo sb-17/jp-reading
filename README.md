@@ -51,6 +51,25 @@ Used anywhere Japanese appears — chapter titles, lines, grammar examples.
 | `漢字{よみ}` | normal — hidden in ふりがな：少なめ |
 | `漢字{{よみ}}` | always shown: names, and kanji the reader isn't expected to know |
 
+## Narration
+
+Lines are read aloud by [VOICEVOX](https://voicevox.hiroshiba.jp/), generated
+once on your machine and committed as small MP3s in `public/audio/<slug>/`.
+
+1. Install VOICEVOX and open it (it serves its engine on `localhost:50021`).
+2. `npm run tts`: lists the stories with what each needs, and asks which to
+   narrate. A narrated story records every line that has no audio yet and
+   deletes files for lines that changed. `npm run tts -- <slug>` skips the
+   question.
+
+Pick a voice per story with `"voice": <style id>` in its JSON, and its pace with
+`"speed"` (VOICEVOX's speedScale; 0.9 by default, 1 is normal). Changing either
+regenerates the whole story. The reader's speed button plays on top of that.
+`npm run tts -- --list` prints the ids. The default is 玄野武宏. The reader shows
+the `VOICEVOX:<name>` credit the VOICEVOX terms ask for, so check the character's
+own terms before switching to a new one. If the script says ffmpeg is missing,
+run `node node_modules/ffmpeg-static/install.js` once.
+
 ## Deploying
 
 Push to `main`. `.github/workflows/deploy.yml` builds and publishes to Pages.

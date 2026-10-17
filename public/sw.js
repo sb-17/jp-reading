@@ -18,6 +18,10 @@ self.addEventListener("activate", (e) => {
 self.addEventListener("fetch", (e) => {
   const req = e.request;
   if (req.method !== "GET" || new URL(req.url).origin !== location.origin) return;
+  /* A Range request (Safari's <audio>) can't be answered with the whole cached
+     file. The reader fetches narration in full instead, so only a play that
+     beats its prefetch ends up here — let it go straight to the network. */
+  if (req.headers.has("range")) return;
 
   e.respondWith(
     (async () => {

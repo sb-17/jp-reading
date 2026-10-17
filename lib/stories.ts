@@ -1,5 +1,6 @@
-import { readFileSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
+import { audioFile } from "./speech";
 
 /* One [japanese, english] pair. The Japanese carries furigana markup — see
    lib/ruby.tsx. */
@@ -17,6 +18,9 @@ export type Chapter = {
   v: [string, string, string][];
   /** grammar: [pattern, meaning, example] */
   g: [string, string, string][];
+  /** added by getStory, not written in the JSON: each line's narration URL,
+      or null where none has been generated */
+  audio?: (string | null)[];
 };
 
 export type Story = {
@@ -25,6 +29,12 @@ export type Story = {
   titleEn: string;
   subtitle: string;
   level: string;
+  /** VOICEVOX style id for `npm run tts`; the script's default if left out */
+  voice?: number;
+  /** narration speed for `npm run tts` (VOICEVOX speedScale, 1 = normal) */
+  speed?: number;
+  /** added by getStory: the voice credit VOICEVOX's terms require */
+  credit?: string;
   chapters: Chapter[];
 };
 
@@ -42,6 +52,25 @@ export function getStories(): Story[] {
     }));
 }
 
+/** One story, with the narration that exists for it. The voice comes from
+    the voice.json `npm run tts` writes, not from the story — the files were
+    named under that voice, whatever the story asks for now. */
 export function getStory(slug: string): Story {
-  return getStories().find((s) => s.slug === slug)!;
+  const story = getStories().find((s) => s.slug === slug)!;
+  const audioDir = path.join(process.cwd(), "public", "audio", slug);
+  const voicePath = path.join(audioDir, "voice.json");
+  if (!existsSync(voicePath)) return story;
+
+  const { speaker, speed, credit } = JSON.parse(readFileSync(voicePath, "utf8"));
+  return {
+    ...story,
+    credit,
+    chapters: story.chapters.map((c) => ({
+      ...c,
+      audio: c.ja.map(([ja]) => {
+        const f = audioFile(ja, speaker, speed);
+        return existsSync(path.join(audioDir, f)) ? `/audio/${slug}/${f}` : null;
+      }),
+    })),
+  };
 }
